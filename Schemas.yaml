@@ -1,0 +1,93 @@
+points:
+  - pointID: xp
+    name: XP
+
+events:
+  - eventID: ID
+    actions:
+      - parameter: parameter
+        value: value|+value|-value
+
+achievements:
+  # list of
+  - achievementID: ID 
+    name: YourAchievement
+    type: [Badge|Belt|...]
+    #
+    replaces: [YourOtherAchievement, ...]
+    # maxAwarded is implicitly 1
+    maxAwarded: 2
+    # possible scopes: (user, course, assignment) 
+    scope: [user, ...] 
+    # rewards
+    reward:
+      # XP | Currency | ...
+      - rewardType: someRewardType
+        amount: someValue
+      - events:
+        # list of 
+        - event: eventID
+    # true | false, implicitly false
+    hidden: false
+    # requirement to get this achievement
+    requirements:
+      #  AND 
+      #  values: implicit >=
+      - awardedAchievements:
+        # list of  
+        - achievementID
+      # list of 
+      - paramenters:
+        - parameter: someOtherParameter
+          value: someValue
+      - events:
+        # list of
+        - eventID: someEventID
+      # someOtherParameter == 10 XOR someOtherParameter == 100
+      - XOR:
+        # list of
+        - parameter: someOtherParameter
+          value: someValue
+        - parameter: someOtherParameter
+          value: someValue
+        # someOtherParameter == 10 OR someOtherParameter == 100
+      - OR:
+        # list of
+        - parameter: someOtherParameter
+          value: someValue
+        - parameter: someOtherParameter
+          value: someValue
+
+
+courses:
+  # list of
+  - courseID: ID
+    name: someCourseName
+    attendands: 
+      # list of
+      - userID
+    weeks:
+      # list of
+      - week: weekNumber
+        startDate: someStartDate
+        endDate: someEndDate
+        assignments: 
+          - assignmentID: someID
+            deadline: someEndDate
+            submissions: 
+              # list of
+              - user: userID
+                submissionTime: someDate
+
+
+users:
+  # list of
+  - userID: someID        
+    paramenters:
+      # list of
+      - someOtherParameter: someValue
+
+    gainedAchievements:
+      - achievementID: someAchievementID
+
+

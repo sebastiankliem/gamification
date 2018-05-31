@@ -1,0 +1,80 @@
+xps:
+  - XP
+
+counter:
+  - name: homework_streak_5_times
+    init_value: 0
+    context: [user, context.course_id]
+
+events:
+  - name: HomeworkSubmitted
+    actions:
+      - xp: XP
+        amount: 10
+  - name: HomeworkSubmittedAsLast
+    actions:
+      - xp: XP
+        amount: 5
+  - name: HomeworkSubmittedInTime
+    actions:
+      - xp: XP
+        amount: 10
+      - streak:
+        name: homework_streak_5_times
+        action: increase
+  - name: HomeworkSubmittedLate
+    actions:
+      - counter:
+        name: homework_streak_5_times
+        action: reset
+
+achievements:
+  - achievementID: HomeworkSubmissionFirstInClass
+    name: First submission in class
+    type: badge
+    requirements:
+      - events:
+        - eventID: HomeworkSubmitted
+      - parameters:
+        - parameter: context.task_id.submittedHomeworks
+          value: 0
+    scope: [user, context.task_id]
+    reward:
+      - rewardType: xp
+        amount: 5
+  - achievementID: HomeworkSubmissionLastInClass
+    name: Last submission in class
+    type: badge
+    requirements:
+      - events: 
+        - event:
+          name: HomeworkSubmittedAsLast
+    reward:
+      - rewardType: xp
+        amount: 2
+    scope: [user, context.task_id]
+  - achievementID: HomeworkSubmissionInTime
+    name: Submitted in time
+    type: badge
+    requirements:
+      - events:
+        - event: 
+          name: HomeworkSubmitted
+      - parameters: 
+        - parameter: submissionTimestamp
+          value: <= context.task_id.submission_deadline
+    scope: [user, context.task_id]
+    reward:
+      - rewardType: xp
+        amount: 2
+  - achievementID: HomeworkSubmissionStreak5
+    name: 5 submissions in time
+    type: badge
+    requirements:
+      - counter:
+        name: homework_streak_5_times
+        value: 5
+    scope: [user, context.course_id]
+    reward:
+      - rewardType: xp
+        amount: 10
