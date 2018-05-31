@@ -1,13 +1,3 @@
-points:
-  - pointID: xp
-    name: XP
-
-events:
-  - eventID: ID
-    actions:
-      - parameter: parameter
-        value: value|+value|-value
-
 achievements:
   # list of
   - achievementID: ID 
@@ -40,9 +30,9 @@ achievements:
       - paramenters:
         - parameter: someOtherParameter
           value: someValue
-      - events:
-        # list of
-        - eventID: someEventID
+      #- events:
+      #  # list of
+      #  - eventID: someEventID
       # someOtherParameter == 10 XOR someOtherParameter == 100
       - XOR:
         # list of
@@ -57,7 +47,6 @@ achievements:
           value: someValue
         - parameter: someOtherParameter
           value: someValue
-
 
 courses:
   # list of
@@ -74,20 +63,33 @@ courses:
         assignments: 
           - assignmentID: someID
             deadline: someEndDate
-            submissions: 
-              # list of
-              - user: userID
-                submissionTime: someDate
-
+          #  submissions: 
+          #    # list of
+          #    - user: userID
+          #      submissionTime: someDate
 
 users:
   # list of
   - userID: someID        
     paramenters:
       # list of
+      - credits: someValue
+      - xp: someValue
       - someOtherParameter: someValue
 
     gainedAchievements:
       - achievementID: someAchievementID
+        amount: someValue
+
+
+events:
+  # list of
+  - eventID: someID
+    user: userID
+    parameters:
+      - parameter: someOtherParameter
+    actions:
+      - action: actionID
+
 
 
