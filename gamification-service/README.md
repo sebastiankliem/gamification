@@ -17,6 +17,9 @@ Getting up and running is as easy as 1, 2, 3.
     cd path/to/gamification-service; npm install
     ```
 
+3. Pull the MongoDB Docker image: `docker pull mongo`
+4. start the MongoDB Docker image: `docker run --name gamification-mongo -v database:/data/db -d -p 27017:27017 mongo`
+
 3. Start your app
 
     ```

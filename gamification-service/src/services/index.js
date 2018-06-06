@@ -1,3 +1,5 @@
-module.exports = function () {
-  const app = this; // eslint-disable-line no-unused-vars
+const achievements = require('./achievements/achievements.service.js');
+// eslint-disable-next-line no-unused-vars
+module.exports = function (app) {
+  app.configure(achievements);
 };
