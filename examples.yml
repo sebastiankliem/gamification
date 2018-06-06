@@ -67,14 +67,33 @@ achievements:
     reward:
       - rewardType: xp
         amount: 2
-  - achievementID: HomeworkSubmissionStreak5
-    name: 5 submissions in time
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+  - achievementID: HomeworkSubmissionStreak3
+    name: 3 continuous submissions in time 
     type: badge
     requirements:
       - counter:
-        name: homework_streak_5_times
-        value: 5
+        name: homework_streak_3_times
+        value: 3
     scope: [user, context.course_id]
     reward:
       - rewardType: xp
         amount: 10
+
+
+
+
+

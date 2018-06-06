@@ -1,0 +1,332 @@
+# schema User in DB for homework submissions
+userID:
+  parameters:
+    homework_submissions:
+      total:
+      courses:
+        - courseUUID:
+          total:
+          assignments:
+            - assngUUID:
+              index: 
+              value:
+
+# initalzustand
+userID: userUUID1234
+  parameters:
+    homework_submissions:
+      total: 0
+      courses:
+
+# zustand nach 7 wochen im ersten kurs des users
+userID: userUUID1234
+  parameters:
+    homework_submissions:
+      total: 5
+      courses:
+        - courseUUID: course1
+          total: 5
+          assignments:
+            - assngUUID: assng1
+              index: 1
+              value: 1
+            - assngUUID: assng2
+              index: 2
+              value: 0
+            - assngUUID: assng3
+              index: 3
+              value: 1
+            - assngUUID: assng4
+              index: 4
+              value: 1
+            - assngUUID: assng5
+              index: 5
+              value: 1
+            - assngUUID: assng6
+              index: 6
+              value: 0
+            - assngUUID: assng7
+              index: 7
+              value: 1
+
+
+# Event für woche 8
+# Events müssen uns massig NUtzlast mitgeben, 
+# damit wir die Daten nur in die DB übersetzen müssen 
+# und keine Logik z.B. zum hochzählen von Parametern benötigen
+# Einzige Logik soll sein, Mapping der Eventdaten nach DB-Struktur
+# und Auswertung der Achievement-Requirements
+HomeworkSubmission: 
+  userID: userUUID1234
+  type: homework_submission
+  total: 6
+  course:
+    courseUUID: course1
+    total:
+    assignment: 
+      assngUUID: assng8
+      index: 8
+      value: 1
+
+
+# same but in JSON
+"HomeworkSubmission": {
+  "userID": "userUUID1234",
+  "type": "homework_submission",
+  "total": 6 ,
+  "course":{
+    "courseUUID": "course1",
+    "total": 6,
+    "assignments": {
+      "assngUUID": "assng8",
+      "index": 8,
+      "value": 1,
+    } 
+  }
+}
+
+# Frage: wie generisch sollen wir werden?
+# z.B: scope: Course mitgeben und 
+# damit bei der Auswertung die Information erhalten, 
+# dass beim Zusammenbau der KeyChain als nächstes nach einer courseUUID gesucht werden soll.
+# Wenn das flexibel sein soll, dann müssten wir auch für Posts etc. tun und die Hierarchie, bzw. die Komplexität der 
+# JSON/YAML Dokumente würde sich erhöhen.
+
+
+Ziel: Update auf Dokument User mit ID: userUUID1234
+KeyChain:
+  userUUID1234.parameters.homework_submissions.total.set(6)
+  userUUID1234.parameters.homework_submissions.courses.course1.total.set(8)
+  userUUID1234.parameters.homework_submissions.courses.course1.assignments.append(
+    {
+      "assngUUID": "assng8",
+      "index": 8,
+      "value": 1,
+    }
+  )
+
+# nächste Frage: wie KeyChain zusammensetzen?
+# Woher wissen wir, in welcher Reihenfolge wir die Update oder Set KeyChains 
+# zusammensetzen müssen?
+
+# Alternative A: Die Events müssen die Daten in der Struktur bereitstellen, wie wir sie haben wollen.
+#       Nachteil: Wenn sich bei uns was ändert, dann müssen sie sich auch ändern.
+
+# Alternative B: Wir haben ein eigenes REgelwerk zur Evaluation von Event.
+#       Nachteil: Ein verdammt riesiger Haufen von IF/ELSE
+
+# Alternative C: Für jedes JSON-Keyword e.g. "Homework-Submission" wird ein Set von parametrisierten
+#                Calls angelegt, die dann (mit den Nutzdaten befüllt) ausgeführt werden
+#       Nachteil: Muss für jede mögliche Aktion gepflegt werden -> Big Ball of Mud
+
+#PROZESSFOLGE
+#
+#  1. Event X erreicht Service (/)
+#  2. Event wird usgewertet -> User Attribute wird erhöht (/)
+#  3. Regel werden evaluiert -> betroffene Attribute werden geprüft
+#    
+#    a) Hole für user XYZ alle Badges die in seiner badge Map den Value 0 haben
+#    b) Hole für jede Badge das Objekt/Conditions aus der DB
+#    c) Evaluiere onditions
+#      each loop over conditions:
+#      - "All conditions satisfied" (initial)= true
+#      - check user attribute
+#      - if current condition not satisfied -> "All conditions satisfied"=false
+#        
+#  
+#  
+#  4. Bei Regelerfüllung:  -> selber Event auslösen -> keine Peilung -> z.B. optische Events
+#              -> Neues Attribut setzen 
+#                -> z.B. Reward (XP) einlösen -> User Attribut ändern
+#                -> Badge Amount +1 in Map
+
+Alle Scopes müssen mindestens für den User sein -> wem sonst sollte dann das Achievement verliehen werden? Dem Chat-Bot?
+Es gibt offensichtlich Achievements, die den User nur allgemein betreffen (XP>=Betrag, x Upvotes für irgendwas, etc.)
+
+Was ist ein Scope wie z.B. "Course"?
+=> man kann das Achievement (z.B. die HomeworkSubmissionStreak3) GENAU 1X pro Kurs per Kurs erhalten.
+
+Frage: Kann man jedes Achievement nur MAX 1X erhalten? Oder gibt es welche, die man mehrfach erhalten kann?
+
+Wir bekommen die userID und die CourseID vom Event und die CourseID steht auch in Kombination mit einer CourseID in den User-Parametern
+
+So weit so gut..
+
+(Heißt Scope Course -> per Kurs oder NUR ein spezifischer Kurs? wahrscheinlich das erste (FUTURE WORK -> Java-Spezialist, weil der user genau diesen Speziellen Kurs absolviert hat))
+
+Ergo  -> alle Achievements die einen User allgemein betreffen werden ausgewertet-> 100ste Hausaufgabe oder 10k XP Marke überschritter (e.g. neuer Level)
+      -> plus Achievements die im Kontext Course sind -> Beim Nutzer Nachschauen, welche Achievements für diese Spezifische CourseID noch nicht vergeben wurden
+            -> z.B. HomeworkSubmissionStreak3 für course1
+
+Wenn REWARD in Achievement: ein eigenes Event wird in die MessageQueue geworfen, welches der Service verarbeiten muss 
+        -> XP erhöhnen
+        -> Achievements auswerten, die die XPs der User betreffen
+
+        => Achievement-Ketten
+
+
+
+
+
+# zustand nach 8 wochen im ersten kurs des users
+# Bis auf Assignment 2 und 6 sind alle abgegeben worden.
+userID: userUUID1234
+  parameters:
+    homework_submissions:
+      total: 6
+      courses:
+        - courseUUID: course1
+          total: 6
+          assignments:
+            - assngUUID: assng1
+              index: 1
+              value: 1
+            - assngUUID: assng2
+              index: 2
+              value: 0
+            - assngUUID: assng3
+              index: 3
+              value: 1
+            - assngUUID: assng4
+              index: 4
+              value: 1
+            - assngUUID: assng5
+              index: 5
+              value: 1
+            - assngUUID: assng6
+              index: 6
+              value: 0
+            - assngUUID: assng7
+              index: 7
+              value: 1
+            - assngUUID: assng8
+              index: 8
+              value: 1
+    gainedAchievements:
+      - achievementID: HomeworkSubmissionStreak3
+        relatedCourse: course1
+        amount: 0
+
+
+#########
+# REGEL #
+#########
+ - achievementID: HomeworkSubmissionStreak3
+    name: 3 continuous submissions in time 
+    type: badge
+    requirements:
+      - counter:
+        name: homework_streak_3_times
+        value: 3
+    scope: [user, course]
+    reward:
+      - rewardType: xp
+        amount: 10
+
+
+
+#############
+# EVLUATION #
+#############
+
+for ( achievement in allAchievements.filter( achievement => achievement.scope == [user] ) ) {
+# alle achievements mit entsprechender ID, die der user noch nicht hat 
+
+
+  # hats der user oder noch nicht? 
+  let achievementGained = user.gainedAchievements.find(function(element){
+    return element.achievementID == achievement.achievementID
+  }).length
+
+  if (!achievementGained) {
+
+    let reqsFulfilled = achievement.requirements.evaluate(eventPayload)
+
+    if(reqsFulfilled){
+      achievement.issue(eventPayload)
+    }
+  }
+}
+
+
+for ( achievement in allAchievements.filter( achievement => achievement.scope == [user, course] ) ) {
+# alle achievements mit entsprechender courseID, die der user noch nicht hat 
+
+  # hats der user oder noch nicht? 
+  let achievementGained = user.gainedAchievements.find(function(element){
+    return 
+           element.achievementID == achievement.achievementID 
+        && element.relatedCourse == eventPayload.course.courseUUID
+  }).length
+
+  if (!achievementGained) {
+
+    let reqsFulfilled = achievement.requirements.evaluate(eventPayload)
+
+    if(reqsFulfilled){
+      achievement.issue(eventPayload)
+    }
+  }
+}
+
+
+
+
+
+class Achievement {
+  constructor(requirementList){
+    this.requirementList = requirementList;
+  }
+
+
+  issue() {
+
+  }
+}
+
+
+class RequirementList {
+  constructor() {
+    this. =;
+  }
+
+  evaluate() {
+
+  }
+
+}
+
+
+
+
+class Requirement {
+  constructor() {
+
+  }
+
+  evaluate() {
+
+  }
+}
+
+
+class Event {
+
+
+
+
+  triggerAchievementAvaluation() {
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
