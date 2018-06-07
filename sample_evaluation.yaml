@@ -54,13 +54,15 @@ userID: userID1234
 # und keine Logik z.B. zum hochzählen von Parametern benötigen
 # Einzige Logik soll sein, Mapping der Eventdaten nach DB-Struktur
 # und Auswertung der Achievement-Requirements
+
+# Mapping Event Payload --> Database
 EventID:
   type: type
   payload: 
-    userID: users[{}]
+    userID: users[{userID}]
     total: user.homework_submissions_total
     course:
-      courseID: users[{userID}].courses[{}]
+      courseID: users[{userID}].courses[{course.courseID}]
       homework_submissions_total: users[{userID}].courses[{course.courseID}].homework_submissions_total
       assignment: 
         assngID: users[{userID}].courses[{course.courseID}].assignments[{course.assignment.assgnID}]
