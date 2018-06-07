@@ -1,53 +1,51 @@
+# XPs
+XPs:
+  - XP
+
 # schema User in DB for homework submissions
 userID:
-  parameters:
-    homework_submissions:
-      total:
-    courses:
-      - courseUUID:
-        total:
-        assignments:
-          - assngUUID:
-            index: 
-            value:
+  homework_submissions_total:
+  courses:
+    - courseID:
+      homework_submissions_total:
+      assignments:
+        - assngID:
+          index: 
+          value:
 
 # initalzustand
-userID: userUUID1234
-  parameters:
-    homework_submissions:
-      total: 0
-      courses:
+userID: userID1234
+  homework_submissions_total: 0
+  courses:
 
 # zustand nach 7 wochen im ersten kurs des users
-userID: userUUID1234
-  parameters:
-    homework_submissions:
-      total: 5
-    courses:
-      - courseUUID: course1
-        total: 5
-        assignments:
-          - assngUUID: assng1
-            index: 1
-            value: 1
-          - assngUUID: assng2
-            index: 2
-            value: 0
-          - assngUUID: assng3
-            index: 3
-            value: 1
-          - assngUUID: assng4
-            index: 4
-            value: 1
-          - assngUUID: assng5
-            index: 5
-            value: 1
-          - assngUUID: assng6
-            index: 6
-            value: 0
-          - assngUUID: assng7
-            index: 7
-            value: 1
+userID: userID1234
+  homework_submissions_total: 5
+  courses:
+    - courseID: course1
+      homework_submissions_total: 5
+      assignments:
+        - assngID: assng1
+          index: 1
+          value: 1
+        - assngID: assng2
+          index: 2
+          value: 0
+        - assngID: assng3
+          index: 3
+          value: 1
+        - assngID: assng4
+          index: 4
+          value: 1
+        - assngID: assng5
+          index: 5
+          value: 1
+        - assngID: assng6
+          index: 6
+          value: 0
+        - assngID: assng7
+          index: 7
+          value: 1
 
 
 # Event für woche 8
@@ -57,28 +55,28 @@ userID: userUUID1234
 # Einzige Logik soll sein, Mapping der Eventdaten nach DB-Struktur
 # und Auswertung der Achievement-Requirements
 HomeworkSubmission: 
-  userID: userUUID1234
+  userID: userID1234
   type: homework_submission
   total: 6
   course:
-    courseUUID: course1
-    total:
+    courseID: course1
+    homework_submissions_total: 6
     assignment: 
-      assngUUID: assng8
+      assngID: assng8
       index: 8
       value: 1
 
 
 # same but in JSON
 "HomeworkSubmission": {
-  "userID": "userUUID1234",
+  "userID": "userID1234",
   "type": "homework_submission",
   "total": 6 ,
   "course":{
-    "courseUUID": "course1",
-    "total": 6,
+    "courseID": "course1",
+    "homework_subsmissions_total": 6,
     "assignments": {
-      "assngUUID": "assng8",
+      "assngID": "assng8",
       "index": 8,
       "value": 1,
     } 
@@ -88,18 +86,18 @@ HomeworkSubmission:
 # Frage: wie generisch sollen wir werden?
 # z.B: scope: Course mitgeben und 
 # damit bei der Auswertung die Information erhalten, 
-# dass beim Zusammenbau der KeyChain als nächstes nach einer courseUUID gesucht werden soll.
+# dass beim Zusammenbau der KeyChain als nächstes nach einer courseID gesucht werden soll.
 # Wenn das flexibel sein soll, dann müssten wir auch für Posts etc. tun und die Hierarchie, bzw. die Komplexität der 
 # JSON/YAML Dokumente würde sich erhöhen.
 
 
-Ziel: Update auf Dokument User mit ID: userUUID1234
+Ziel: Update auf Dokument User mit ID: userID1234
 KeyChain:
-  userUUID1234.parameters.homework_submissions.total.set(6)
-  userUUID1234.parameters.homework_submissions.courses.course1.total.set(8)
-  userUUID1234.parameters.homework_submissions.courses.course1.assignments.append(
+  userID1234.parameters.homework_submissions_total.set(6)
+  userID1234.parameters.homework_submissions.courses.course1.homework_submissions_total.set(8)
+  userID1234.parameters.homework_submissions.courses.course1.assignments.append(
     {
-      "assngUUID": "assng8",
+      "assngID": "assng8",
       "index": 8,
       "value": 1,
     }
@@ -170,57 +168,57 @@ Wenn REWARD in Achievement: ein eigenes Event wird in die MessageQueue geworfen,
 
 # zustand nach 8 wochen im ersten kurs des users
 # Bis auf Assignment 2 und 6 sind alle abgegeben worden.
-userID: userUUID1234
-  parameters:
-    homework_submissions:
-      total: 6
-    courses:
-      - courseUUID: course1
-        total: 6
-        assignments:
-          - assngUUID: assng1
-            index: 1
-            value: 1
-          - assngUUID: assng2
-            index: 2
-            value: 0
-          - assngUUID: assng3
-            index: 3
-            value: 1
-          - assngUUID: assng4
-            index: 4
-            value: 1
-          - assngUUID: assng5
-            index: 5
-            value: 1
-          - assngUUID: assng6
-            index: 6
-            value: 0
-          - assngUUID: assng7
-            index: 7
-            value: 1
-          - assngUUID: assng8
-            index: 8
-            value: 1
-    gainedAchievements:
-      - achievementID: HomeworkSubmissionStreak3
-        relatedCourse: course1
-        amount: 0
+userID: userID1234
+  homework_submissions:
+    total: 6
+  courses:
+    - courseID: course1
+      homework_submissions_total: 6
+      assignments:
+        - assngID: assng1
+          index: 1
+          value: 1
+        - assngID: assng2
+          index: 2
+          value: 0
+        - assngID: assng3
+          index: 3
+          value: 1
+        - assngID: assng4
+          index: 4
+          value: 1
+        - assngID: assng5
+          index: 5
+          value: 1
+        - assngID: assng6
+          index: 6
+          value: 0
+        - assngID: assng7
+          index: 7
+          value: 1
+        - assngID: assng8
+          index: 8
+          value: 1
+  gainedAchievements:
+    - achievementID: HomeworkSubmissionStreak3
+      relatedCourse: course1
+      amount: 0
 
 
 #########
-# REGEL #
+# REGEL == Achievements #
 #########
- - achievementID: HomeworkSubmissionStreak3
+ HomeworkSubmissionStreak3:
     name: 3 continuous submissions in time 
     type: badge
     requirements:
-      - counter:
-        name: homework_streak_3_times
-        value: 3
+      - type: streak
+        name: course.assignments
+        value: 1
+        amount: 3
     scope: [user, course]
     reward:
-      - rewardType: xp
+      - type: XP
         amount: 10
 
 
@@ -256,7 +254,7 @@ for ( achievement in allAchievements.filter( achievement => achievement.scope ==
   let achievementGained = user.gainedAchievements.find(function(element){
     return 
            element.achievementID == achievement.achievementID 
-        && element.relatedCourse == eventPayload.course.courseUUID
+        && element.relatedCourse == eventPayload.course.courseID
   }).length
 
   if (!achievementGained) {
