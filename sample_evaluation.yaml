@@ -54,6 +54,19 @@ userID: userID1234
 # und keine Logik z.B. zum hochzählen von Parametern benötigen
 # Einzige Logik soll sein, Mapping der Eventdaten nach DB-Struktur
 # und Auswertung der Achievement-Requirements
+EventID:
+  type: type
+  payload: 
+    userID: users[{}]
+    total: user.homework_submissions_total
+    course:
+      courseID: users[{userID}].courses[{}]
+      homework_submissions_total: users[{userID}].courses[{course.courseID}].homework_submissions_total
+      assignment: 
+        assngID: users[{userID}].courses[{course.courseID}].assignments[{course.assignment.assgnID}]
+        index: users[{userID}].courses[{course.courseID}].assignments[{course.assignment.assgnID}].index
+        value: users[{userID}].courses[{course.courseID}].assignments[{course.assignment.assgnID}].value
+
 HomeworkSubmission: 
   userID: userID1234
   type: homework_submission
@@ -169,8 +182,7 @@ Wenn REWARD in Achievement: ein eigenes Event wird in die MessageQueue geworfen,
 # zustand nach 8 wochen im ersten kurs des users
 # Bis auf Assignment 2 und 6 sind alle abgegeben worden.
 userID: userID1234
-  homework_submissions:
-    total: 6
+  homework_submissions_total: 6
   courses:
     - courseID: course1
       homework_submissions_total: 6
@@ -208,18 +220,28 @@ userID: userID1234
 #########
 # REGEL == Achievements #
 #########
- HomeworkSubmissionStreak3:
-    name: 3 continuous submissions in time 
-    type: badge
-    requirements:
-      - type: streak
-        name: course.assignments
-        value: 1
-        amount: 3
-    scope: [user, course]
-    reward:
-      - type: XP
-        amount: 10
+TotalHomeworkSubmissions5:
+  name: 5 homework submissions
+  type: badge
+  requirements:
+    - name: user.homework_submissions_total
+      amount: 5
+  scope: [user]
+  rewards:
+    - type: XP
+      amount: 10
+HomeworkSubmissionStreak3:
+  name: 3 continuous submissions in time 
+  type: badge
+  requirements:
+    - type: streak
+      name: course.assignments
+      value: 1
+      amount: 3
+  scope: [user, course]
+  rewards:
+    - type: XP
+      amount: 10
 
 
 
