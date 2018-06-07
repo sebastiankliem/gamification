@@ -3,13 +3,13 @@ userID:
   parameters:
     homework_submissions:
       total:
-      courses:
-        - courseUUID:
-          total:
-          assignments:
-            - assngUUID:
-              index: 
-              value:
+    courses:
+      - courseUUID:
+        total:
+        assignments:
+          - assngUUID:
+            index: 
+            value:
 
 # initalzustand
 userID: userUUID1234
@@ -23,31 +23,31 @@ userID: userUUID1234
   parameters:
     homework_submissions:
       total: 5
-      courses:
-        - courseUUID: course1
-          total: 5
-          assignments:
-            - assngUUID: assng1
-              index: 1
-              value: 1
-            - assngUUID: assng2
-              index: 2
-              value: 0
-            - assngUUID: assng3
-              index: 3
-              value: 1
-            - assngUUID: assng4
-              index: 4
-              value: 1
-            - assngUUID: assng5
-              index: 5
-              value: 1
-            - assngUUID: assng6
-              index: 6
-              value: 0
-            - assngUUID: assng7
-              index: 7
-              value: 1
+    courses:
+      - courseUUID: course1
+        total: 5
+        assignments:
+          - assngUUID: assng1
+            index: 1
+            value: 1
+          - assngUUID: assng2
+            index: 2
+            value: 0
+          - assngUUID: assng3
+            index: 3
+            value: 1
+          - assngUUID: assng4
+            index: 4
+            value: 1
+          - assngUUID: assng5
+            index: 5
+            value: 1
+          - assngUUID: assng6
+            index: 6
+            value: 0
+          - assngUUID: assng7
+            index: 7
+            value: 1
 
 
 # Event für woche 8
@@ -174,34 +174,34 @@ userID: userUUID1234
   parameters:
     homework_submissions:
       total: 6
-      courses:
-        - courseUUID: course1
-          total: 6
-          assignments:
-            - assngUUID: assng1
-              index: 1
-              value: 1
-            - assngUUID: assng2
-              index: 2
-              value: 0
-            - assngUUID: assng3
-              index: 3
-              value: 1
-            - assngUUID: assng4
-              index: 4
-              value: 1
-            - assngUUID: assng5
-              index: 5
-              value: 1
-            - assngUUID: assng6
-              index: 6
-              value: 0
-            - assngUUID: assng7
-              index: 7
-              value: 1
-            - assngUUID: assng8
-              index: 8
-              value: 1
+    courses:
+      - courseUUID: course1
+        total: 6
+        assignments:
+          - assngUUID: assng1
+            index: 1
+            value: 1
+          - assngUUID: assng2
+            index: 2
+            value: 0
+          - assngUUID: assng3
+            index: 3
+            value: 1
+          - assngUUID: assng4
+            index: 4
+            value: 1
+          - assngUUID: assng5
+            index: 5
+            value: 1
+          - assngUUID: assng6
+            index: 6
+            value: 0
+          - assngUUID: assng7
+            index: 7
+            value: 1
+          - assngUUID: assng8
+            index: 8
+            value: 1
     gainedAchievements:
       - achievementID: HomeworkSubmissionStreak3
         relatedCourse: course1
@@ -311,11 +311,11 @@ class Requirement {
 
 
 class Event {
+  constructor() {
 
+  }
 
-
-
-  triggerAchievementAvaluation() {
+  triggerAchievementEvaluation() {
 
   }
 }
