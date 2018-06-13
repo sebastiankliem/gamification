@@ -1,5 +1,6 @@
 // using amqplib to connect to rabbitmq
 const amqp = require('amqplib');
+const eventParser = require('../../event-parser');
 
 /* eslint-disable no-unused-vars */
 class Service {
@@ -68,8 +69,9 @@ class Service {
         var ok = ch.assertQueue(queue, {durable: true});
         ok = ok.then(function(_qok) {
           return ch.consume(queue, function(msg) {
+            console.log("AMQP Connector received message:");
             console.log(JSON.parse(msg.content));            
-            // here must come the event evaluation
+            eventParser.parse(JSON.parse(msg.content));
           }, {noAck: true});
         });
         return ok.then(function(_consumeOk) {

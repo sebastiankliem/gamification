@@ -1,0 +1,15 @@
+events:
+  homework_submission:
+    userID: users[{userID}]
+    payload: 
+      total: homework_submissions_total
+      # course:
+      #   courseID: courses[{course.courseID}]
+      #   homework_submissions_total: courses[{course.courseID}].homework_submissions_total
+      #   assignment: 
+      #     assngID: courses[{course.courseID}].assignments[{course.assignment.assgnID}]
+      #     index: courses[{course.courseID}].assignments[{course.assignment.assgnID}].index
+      #     value: courses[{course.courseID}].assignments[{course.assignment.assgnID}].value
+    actions:
+      - name: XP
+        value: 10

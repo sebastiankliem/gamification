@@ -4,14 +4,22 @@ XPs:
 
 # schema User in DB for homework submissions
 userID:
+  xp:
+    - name: 
+      amount: 
   homework_submissions_total:
   courses:
     - courseID:
       homework_submissions_total:
       assignments:
-        - assngID:
+        - assgnID:
           index: 
           value:
+  gainedAchievements:
+    - achievementID:
+      relatedCourse:
+
+
 
 # initalzustand
 userID: userID1234
@@ -29,7 +37,7 @@ userID: userID1234
           index: 1
           value: 1
         - assngID: assng2
-          index: 2
+          index:
           value: 0
         - assngID: assng3
           index: 3
