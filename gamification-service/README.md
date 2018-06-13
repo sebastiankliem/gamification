@@ -20,7 +20,9 @@ Getting up and running is as easy as 1, 2, 3.
 3. Pull the MongoDB Docker image: `docker pull mongo`
 4. start the MongoDB Docker image: `docker run --name gamification-mongo -v database:/data/db -d -p 27017:27017 mongo`
 
-3. Start your app
+5. Pull RabbitMQ image and start container from it with exposed ports on host: 'docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management'
+
+6. Start your app
 
     ```
     npm start
