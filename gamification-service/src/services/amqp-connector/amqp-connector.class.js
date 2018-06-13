@@ -1,6 +1,5 @@
 // using amqplib to connect to rabbitmq
 const amqp = require('amqplib');
-const app = require('../../app');
 
 /* eslint-disable no-unused-vars */
 class Service {
