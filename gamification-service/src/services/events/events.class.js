@@ -31,9 +31,8 @@ class Event {
   }
 
   async getUser() {
-    var uid = this.userID;
     return (await this.app.service('users').find({
-      query: { $where: 'this.user_id === "' + uid + '"'}
+      query: { $where: 'this.user_id === "' + this.userID + '"'}
     })).data[0];
   }
   
