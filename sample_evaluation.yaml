@@ -93,16 +93,18 @@ HomeworkSubmission:
 # same but in JSON
 "HomeworkSubmission": {
   "userID": "userID1234",
-  "type": "homework_submission",
-  "total": 6 ,
-  "course":{
-    "courseID": "course1",
-    "homework_subsmissions_total": 6,
-    "assignments": {
-      "assngID": "assng8",
-      "index": 8,
-      "value": 1,
-    } 
+  "event_type": "homework_submission",
+  "payload": {
+    "total": 6 ,
+    "course":{
+      "courseID": "course1",
+      "homework_subsmissions_total": 6,
+      "assignments": {
+        "assngID": "assng8",
+        "index": 8,
+        "value": 1
+      } 
+    }
   }
 }
 

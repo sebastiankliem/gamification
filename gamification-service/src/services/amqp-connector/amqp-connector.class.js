@@ -1,11 +1,14 @@
 // using amqplib to connect to rabbitmq
 const amqp = require('amqplib');
-const eventParser = require('../../event-parser');
 
 /* eslint-disable no-unused-vars */
 class Service {
   constructor (options) {
     this.options = options || {};
+  }
+
+  setup(app) {
+    this.app = app;
   }
 
   async find (params) {
@@ -63,6 +66,7 @@ class Service {
   }
 
   async receiveFromQueue(host, queue) {
+    let that = this;
     amqp.connect('amqp://' + host).then(function(conn) {
       process.once('SIGINT', function() { conn.close(); });
       return conn.createChannel().then(function(ch) {
@@ -71,7 +75,8 @@ class Service {
           return ch.consume(queue, function(msg) {
             console.log("AMQP Connector received message:");
             console.log(JSON.parse(msg.content));            
-            eventParser.parse(JSON.parse(msg.content));
+            that.app.service('events').create(JSON.parse(msg.content));
+            //eventParser.parse(JSON.parse(msg.content));
           }, {noAck: true});
         });
         return ok.then(function(_consumeOk) {
